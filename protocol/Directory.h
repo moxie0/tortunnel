@@ -34,6 +34,7 @@
 #include <boost/asio.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+#include <list>
 #include <string>
 #include <stdio.h>
 
