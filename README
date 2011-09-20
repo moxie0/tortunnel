@@ -1,13 +1,15 @@
-tortunnel is a partial Onion Proxy implementation that's designed to build single-hop circuits through TOR exit nodes. This is useful for instances where you might want some very low level of anonymity and don't want to deal with the performance implications of using TOR's full three-hop circuits.
+tortunnel is a partial Onion Proxy implementation that's designed to build single-hop circuits through Tor exit nodes. This is useful in cases where you might want some very low level of anonymity and don't want to deal with the performance implications of using Tor's full three-hop circuits.
 
-It runs both as a SOCKS interface, and also exposes a fairly clean asynchronous C++ API to the TOR protocol itself. It was first written as a scanning tool for checking to see whether exit nodes were running sslstrip and is well suited for implementing other high-performance scanning routines against the TOR network as a whole.
+tortunnel exposes itself both as a SOCKS interface, as well as a fairly clean asynchronous C++ API to the Tor protocol itself. It was first written as a scanning tool for checking to see whether exit nodes were running sslstrip, and is well suited for implementing other high-performance scanning routines against the Tor network as a whole.
 
 It might also be useful for implementing a perspectives-like interface for checking SSL, SSH, or other host certificates. It could be useful as an nmap scanning mode, or perhaps for something else entirely.
 
-To use the SOCKS interface, extract and compile the source. You will need the BOOST libraries in order to compile.
+To expose a SOCKS interface on localhost:5060 to a random one-hop Tor exit node, run:
 
-Then run: ./torproxy <exitNodeIpAddress>
+torproxy -p 5060 -r
 
-If you don't know the IP address of an exit node you'd like to proxy through, you can check the directory. You're probably looking for entries marked "Exit" "Running" and "Fast."
+To expose a SOCKS interface on localhost:5060 to a specific Tor exit node IP address, run:
 
-This will open a SOCKS interface on localhost:5060, which you can then point applications which support SOCKS proxies to. Be careful, though, remember that this is not useful for anything approaching strict anonymity requirements. 
+torproxy -p 5060 -n <ip>
+
+These commands will open a SOCKS interface on localhost:5060, which you can then point applications which support SOCKS proxies to. Be careful, though, remember that this is not useful for anything approaching strict anonymity requirements. 
