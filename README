@@ -13,3 +13,5 @@ To expose a SOCKS interface on localhost:5060 to a specific Tor exit node IP add
 torproxy -p 5060 -n <ip>
 
 These commands will open a SOCKS interface on localhost:5060, which you can then point applications which support SOCKS proxies to. Be careful, though, remember that this is not useful for anything approaching strict anonymity requirements. 
+
+To see if it works, you can try a "curl --socks5 localhost:5060 ifconfig.me" and compare it with the output of "curl ifconfig.me".
