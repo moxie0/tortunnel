@@ -1,0 +1,5 @@
+To install:
+
+Extract and run: ./configure; make;
+
+To build, you'll need the boost libraries and openssl.
