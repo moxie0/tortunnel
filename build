@@ -1,0 +1,73 @@
+#!/bin/bash
+
+### func
+function build/ac() {
+  local _a
+  for _a in aclocal autoconf automake ; do
+    echo -n "Running ${_a}: "
+    ${_a}
+    if test $? -gt 0 ; then
+      echo "failed"
+      exit 1
+    fi
+    echo "done"
+  done
+}
+
+boost="/opt/local/include/boost"
+function build/boost() {
+  echo -n "Checking boost: "
+  if ! test -d "${boost}" ; then
+    echo "not found"
+    echo -en "Install (y / n): "
+    read ans
+    case "${ans}" in
+      "y" | "yes" )
+        sudo port install boost
+      ;;
+      "n" | "no" | "q"  )
+        exit 1
+      ;;
+    esac
+  fi
+}
+
+### main
+os="lnx"
+if ! test "${OSTYPE##darwin}" = "${OSTYPE}" ; then
+  os="osx"
+fi
+
+build/ac
+
+if test "${os}" = "osx" ; then
+  build/boost
+  if ! test -L "./boost" ; then
+    ln -s "${boost}" "./boost"
+  fi
+  echo "done"
+fi
+
+if test "${os}" = "osx" ; then
+  ./configure LDFLAGS="-L/opt/local/lib"
+else
+  ./configure
+fi
+make
+
+for i in torproxy torscanner ; do
+  echo -n "Checking ${i}: "
+  if test -x "${i}" ; then
+    upx "${i}"
+    mv "${i}" "${i}.${os}"
+    if test $? -gt 0 ; then
+      echo "failed"
+      exit 1
+    else
+      echo "done"
+    fi
+  else
+    echo "failed"
+    exit 1
+  fi
+done
