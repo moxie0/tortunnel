@@ -119,27 +119,31 @@ class ExitNodeIterator {
       if (runningFlag < flagsEnd) break;
       else                        index++;      
     }
-    
-    if(directory.directoryList[listingStart] == 'a') {
-	// Go back 1 line up to find IP in correct way accepted by tortunnel otherwise 
-	// Find way to add entry based on mac address
-	//   for e.g. below entry in the directory server list will cause segmentation fault
-	//	r DFRI0 3YvXMHAXQH/MNvjQSmiPdKB3TAI tcWEUFp6Nh72DOBIoUK/OkBR0oc 2012-12-02 15:03:11 171.25.193.20 443 80
-	//	a [2001:67c:289c::20]:443
-	//	s Exit Fast Named Running V2Dir Valid
-	listingEnd   = directory.directoryList.rfind("\n", listingStart);
-	listingStart = directory.directoryList.rfind("\n", listingEnd-1);
-	listingStart++;	
-     }
-     
+
     listingEnd   = directory.directoryList.rfind("\n", index);
     listingStart = directory.directoryList.rfind("\n", listingEnd-1);
     listingStart++;
+    
+    // More generic rather than just moving 1 line above...
+     while (directory.directoryList[listingStart] != 'r'&& listingStart != -1) {
+	  // go back 1 line back to find IP in correct way, which tortunnel accepts and handles else 
+	  // find way to add the address based on mac address
+    	  listingEnd   = directory.directoryList.rfind("\n", listingStart);
+	  listingStart = directory.directoryList.rfind("\n", listingEnd-1);
+	  listingStart++;	
+      }
+
+    index++;
+
+    if(listingStart == -1) {
+	boost::shared_ptr<ServerListing> null;
+	return null;
+    }
 
     std::string listing = directory.directoryList.substr(listingStart, listingEnd-listingStart);
     boost::shared_ptr<ServerListing> serverListing(new ServerListing(directory.io_service, listing));        
 
-    index++;
+    // index++;
 
     return serverListing;
   }
