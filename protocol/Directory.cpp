@@ -48,7 +48,7 @@ void Directory::getServerListingComplete(boost::shared_ptr<ServerListing> server
 void Directory::getRandomServerListing(RetrieveServerListingHandler handler)
 {
   int count = 0;
-  int index = Util::getRandom() % serverListings.size();
+  int index = serverListings.size() == 0 ? 0 : Util::getRandom() % serverListings.size();
 
   std::cerr << "Choosing exit node at index: " << index << " out of " << serverListings.size() << " listings..." << std::endl;
 
