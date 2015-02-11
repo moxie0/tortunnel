@@ -1,3 +1,4 @@
+AC_CONFIG_MACRO_DIR([m4])
 AC_INIT(TorProxy.cpp)
 AM_INIT_AUTOMAKE(tortunnel,0.3)
 AC_PROG_CC
