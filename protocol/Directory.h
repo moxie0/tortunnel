@@ -30,6 +30,7 @@
  * SUCH DAMAGE.
  */
 
+#include <list>
 #include <boost/shared_ptr.hpp>
 #include <boost/asio.hpp>
 #include <boost/function.hpp>
